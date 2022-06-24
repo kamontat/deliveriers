@@ -1,0 +1,23 @@
+pull_request_rules:
+  - name: Automatic merge dependabot
+    conditions:
+      - author~=^dependabot\[bot\]$
+      - base=main
+      - -closed
+      - -conflict
+      - check-success=Default
+    actions:
+      merge:
+        method: merge
+  - name: Automatic merge code owner
+    conditions:
+      - author~=^kamontat$
+      - -draft
+      - -conflict
+      - -closed
+      - label!=wip
+      - -title~=^wip
+      - check-success=Default
+    actions:
+      merge:
+        method: merge
