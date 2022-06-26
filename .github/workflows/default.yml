@@ -42,9 +42,4 @@ jobs:
           cache: "yarn"
       - run: yarn install
       - run: yarn build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KC_DELIVERIERS }}"
-          channelId: live
-          projectId: kc-deliveriers
+      - run: echo "deploying"
