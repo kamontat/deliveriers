@@ -1,6 +1,14 @@
 <script lang="ts">
+  import { browser } from "$app/env";
+
   import { goto } from "$app/navigation";
-  import { signin } from "$lib/authentication";
+  import { isSignin, signin } from "$lib/authentication";
+
+  $: {
+    if ($isSignin && browser) {
+      goto("/");
+    }
+  }
 
   let name: string = "Signin Page";
   let submitAction: Promise<void>;
