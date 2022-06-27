@@ -1,19 +1,29 @@
 // Function name: menus/list
 
+const getArgs = (arg, key, defaultValue) => {
+  if (arg && arg[key]) {
+    return arg[key];
+  }
+  return defaultValue;
+};
+
 const listMenus = async (arg) => {
-  const limit = arg.limit ? arg.limit : 20;
+  const limit = getArgs(arg, "limit", 20);
+  const name = getArgs(arg, "name", undefined);
 
-  const pipeline = [
-    // sort by date
-    {
-      $sort: {
-        create_at: -1,
+  const pipeline = [];
+  if (name) {
+    pipeline.push({
+      $search: {
+        autocomplete: {
+          path: "name",
+          query: name,
+        },
       },
-    },
+    });
+  }
 
-    // filter only limit number of reviews
-    { $limit: limit },
-
+  pipeline.push(
     // select only fields for reponse
     {
       $project: {
@@ -24,7 +34,17 @@ const listMenus = async (arg) => {
         createAt: "$create_at",
       },
     },
-  ];
+
+    // sort by date
+    {
+      $sort: {
+        create_at: -1,
+      },
+    },
+
+    // filter only limit number of reviews
+    { $limit: limit }
+  );
 
   const mongodb = context.services.get("mongodb-atlas");
   const _menus = await mongodb.db("default").collection("menus");

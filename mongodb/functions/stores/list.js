@@ -1,19 +1,40 @@
 // Function name: stores/list
 
+const getArgs = (arg, key, defaultValue) => {
+  if (arg && arg[key]) {
+    return arg[key];
+  }
+  return defaultValue;
+};
+
 const listStores = async (arg) => {
-  const limit = arg.limit ? arg.limit : 20;
-  const name = arg.name;
+  const limit = getArgs(arg, "limit", 20);
+  const name = getArgs(arg, "name", undefined);
+  const appName = getArgs(arg, "appName", undefined);
 
   const pipeline = [];
 
-  // filter store by name
   if (name) {
     pipeline.push({
+      $search: {
+        autocomplete: {
+          path: "name",
+          query: name,
+        },
+      },
+    });
+  }
+
+  if (appName) {
+    const apps = await context.functions.execute("apps/list", {
+      name: appName,
+    });
+    const appIds = apps.rows.map((app) => app.id);
+    // console.log(JSON.stringify(appsIds, undefined, "  "));
+    pipeline.push({
       $match: {
-        $text: {
-          $search: name,
-          $language: "none",
-          $caseSensitive: false,
+        app_ids: {
+          $in: appIds,
         },
       },
     });
@@ -31,17 +52,17 @@ const listStores = async (arg) => {
     },
 
     {
-      $unwind: "$apps",
+      $unwind: {
+        path: "$apps",
+        preserveNullAndEmptyArrays: true,
+      },
     },
 
     {
       $group: {
-        _id: "$_id",
+        _id: "$name",
         id: {
           $first: "$_id",
-        },
-        name: {
-          $first: "$name",
         },
         createAt: {
           $first: "$create_at",
@@ -49,7 +70,7 @@ const listStores = async (arg) => {
         apps: {
           $push: {
             id: "$apps._id",
-            name: "apps.name",
+            name: "$apps.name",
           },
         },
       },
@@ -80,7 +101,12 @@ const listStores = async (arg) => {
 
   return {
     total: count,
-    rows,
+    // Current query have problem when application doesn't contains any apps.
+    // It form apps array with empty object. `apps: [{}]`
+    rows: rows.map((row) => {
+      row.apps = row.apps.length === 1 && row.apps[0].id === undefined ? [] : row.apps;
+      return row;
+    }),
   };
 };
 

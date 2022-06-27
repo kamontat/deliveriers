@@ -1,9 +1,71 @@
 // Function name: reviews/list
 
-const listReviews = async (arg) => {
-  const limit = arg.limit ? arg.limit : 20;
+const getArgs = (arg, key, defaultValue) => {
+  if (arg && arg[key]) {
+    return arg[key];
+  }
+  return defaultValue;
+};
 
-  const pipeline = [
+const listReviews = async (arg) => {
+  const limit = getArgs(arg, "limit", 20);
+
+  const star = getArgs(arg, "star", undefined);
+  const description = getArgs(arg, "description", undefined);
+  const appName = getArgs(arg, "appName", undefined);
+  const storeName = getArgs(arg, "storeName", undefined);
+  const menuName = getArgs(arg, "menuName", undefined);
+
+  const pipeline = [];
+  if (description) {
+    pipeline.push({
+      $search: {
+        autocomplete: {
+          path: "description",
+          query: description,
+        },
+      },
+    });
+  }
+  if (storeName || appName) {
+    const stores = await context.functions.execute("stores/list", {
+      name: storeName,
+      appName: appName,
+    });
+    const storeIds = stores.rows.map((store) => store.id);
+    pipeline.push({
+      $match: {
+        store_id: {
+          $in: storeIds,
+        },
+      },
+    });
+  }
+  if (menuName) {
+    const menus = await context.functions.execute("menus/list", {
+      name: menuName,
+    });
+    const menuIds = stores.rows.map((menu) => menu.id);
+    pipeline.push({
+      $match: {
+        menu_id: {
+          $in: menuIds,
+        },
+      },
+    });
+  }
+  if (star) {
+    const stars = Array.isArray(star) ? star : [star];
+    pipeline.push({
+      $match: {
+        star: {
+          $in: stars,
+        },
+      },
+    });
+  }
+
+  pipeline.push(
     // join with menus collection
     {
       $lookup: {
@@ -103,8 +165,8 @@ const listReviews = async (arg) => {
     },
 
     // filter only limit number of reviews
-    { $limit: limit },
-  ];
+    { $limit: limit }
+  );
 
   const mongodb = context.services.get("mongodb-atlas");
   const _reviews = await mongodb.db("default").collection("reviews");
