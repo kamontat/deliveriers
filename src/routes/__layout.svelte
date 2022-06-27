@@ -2,6 +2,10 @@
   import { user, getUsername } from "$lib/authentication";
 </script>
 
+<script lang="ts">
+  import "../app.css";
+</script>
+
 <svelte:head>
   <meta name="description" content="hello" />
 </svelte:head>
