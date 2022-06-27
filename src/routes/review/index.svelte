@@ -1,5 +1,9 @@
 <script lang="ts">
+  import { protectedRoute } from "$lib/authentication";
+
   let name: string = "Create new review page";
+
+  $: protectedRoute();
 </script>
 
 <svelte:head>

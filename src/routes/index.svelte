@@ -11,7 +11,7 @@
   };
 </script>
 
-<h1>Welcome to {name} website</h1>
+<h1 class="text-3xl font-bold underline">Welcome to {name} website</h1>
 {#if $isSignin}
   <button on:click={_signout}>Signout </button>
 {/if}
