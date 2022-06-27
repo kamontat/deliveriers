@@ -4,6 +4,7 @@ This is platform for delivery application.
 For extends some functionality lack from delivery application.
 
 Functionality:
+
 - Review menus or stores
 
 ## DevStacks

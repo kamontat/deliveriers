@@ -1,6 +1,6 @@
-import type { App } from "$lib/apps/models";
-import type { Menu } from "$lib/menus/models";
-import type { Store } from "$lib/stores/models";
+import type { App } from "$lib/apps";
+import type { Menu } from "$lib/menus";
+import type { Store } from "$lib/stores";
 
 export interface Review {
   id: string;

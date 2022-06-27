@@ -1,4 +1,4 @@
-import type { App } from "$lib/apps/models";
+import type { App } from "$lib/apps";
 
 export interface Store {
   id: string;

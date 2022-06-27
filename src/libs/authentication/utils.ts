@@ -4,7 +4,7 @@ import { Credentials } from "realm-web";
 import { browser } from "$app/env";
 import { goto } from "$app/navigation";
 
-import { SIGNIN_PATH } from "$lib/routes/constants";
+import { SIGNIN_PATH } from "$lib/authentication";
 
 import { app } from "./constants";
 import { user, isSignin } from "./stores";
