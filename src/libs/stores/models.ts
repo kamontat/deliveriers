@@ -11,3 +11,15 @@ export interface Stores {
   total: number;
   rows: Store[];
 }
+
+export interface StoreAddArgs {
+  name: string;
+  appIds?: string[];
+  createAt?: Date;
+}
+
+export interface StoreListArgs {
+  limit?: number;
+  name?: string;
+  appName?: string;
+}

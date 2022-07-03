@@ -19,3 +19,20 @@ export interface Reviews {
   total: number;
   rows: Review[];
 }
+
+export interface ReviewAddArgs {
+  star: number;
+  description: string;
+  menuId: string;
+  storeId: string;
+  createAt?: Date;
+}
+
+export interface ReviewListArgs {
+  limit?: number;
+  star?: number[] | number;
+  description?: string;
+  appName?: string;
+  storeName?: string;
+  menuName?: string;
+}

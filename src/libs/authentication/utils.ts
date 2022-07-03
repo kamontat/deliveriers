@@ -30,11 +30,3 @@ export const signout = async () => {
 export const getUsername = (user: RealmUser | undefined): string => {
   return user?.profile.email?.split("@")[0] ?? "Anonymous";
 };
-
-export const protectedRoute = () => {
-  isSignin.subscribe((i) => {
-    if (!i && browser) {
-      goto(SIGNIN_PATH);
-    }
-  });
-};
