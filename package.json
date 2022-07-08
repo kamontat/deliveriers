@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "realm": "^10.19.2",
-    "realm-web": "^1.7.0",
+    "realm-web": "^1.7.1",
     "rxjs": "^7.5.5"
   }
 }

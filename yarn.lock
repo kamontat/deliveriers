@@ -98,7 +98,7 @@
     "@types/node" "*"
     playwright-core "1.22.2"
 
-"@realm.io/common@^0.1.1", "@realm.io/common@^0.1.2":
+"@realm.io/common@^0.1.2", "@realm.io/common@^0.1.4":
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/@realm.io/common/-/common-0.1.4.tgz#d50ed1c91af1477695222ce04754a19a81336a54"
   integrity sha512-+nI/fOa/G9idiZ7h9DVz5NmnrvVNI3AM/I0eB7vL/PxDCF8vH3vew8ZrWOSr08GT2bDliy1wB6IYRqezQ1H/Iw==
@@ -2358,12 +2358,12 @@ realm-network-transport@^0.7.2:
     abort-controller "^3.0.0"
     node-fetch "^2.6.0"
 
-realm-web@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/realm-web/-/realm-web-1.7.0.tgz#b214abdedd7b009ae46e254e880d25d0b036080c"
-  integrity sha512-1I1E8GMCfKkRujHIbdr94uunJ+237Vog+tkuOHy3m/cqFewKWBp7cMbvrn73DjFRcoD9nVweiCLSni64+99TRQ==
+realm-web@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/realm-web/-/realm-web-1.7.1.tgz#5eb5c039221715a542881be8716f087e1b5af871"
+  integrity sha512-FQ7sjJ/HkzuF/QLD0AQxUi1Vzd49pKUFCc3UuvHQIoH62eHh8JotG6ZatTldlx+KY+vyW252ygxnorWGL+4dDw==
   dependencies:
-    "@realm.io/common" "^0.1.1"
+    "@realm.io/common" "^0.1.4"
     bson "^4.5.4"
     detect-browser "^5.2.1"
     js-base64 "^3.7.2"
