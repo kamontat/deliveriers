@@ -112,26 +112,26 @@
     picomatch "^2.2.2"
 
 "@sveltejs/adapter-auto@next":
-  version "1.0.0-next.52"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-auto/-/adapter-auto-1.0.0-next.52.tgz#6894ff081efc6d7844ad05a818ba11d45a146935"
-  integrity sha512-jOuC7RauiwGg7BQQEZxBGcwtwynNqQSuGJ7MJ9kk5WIrFCMrZSclwnpO1yLmUUYFKvJ61Z7bvVoDqm6+CgLEaw==
+  version "1.0.0-next.54"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-auto/-/adapter-auto-1.0.0-next.54.tgz#c9a25efd326430f3cff7bc69131daae352ffc217"
+  integrity sha512-GT3LmE+Qy4HcMO/CZJJTLWaLrchufo1Z+BVec79u02GNM16y7Q8Jbs1gVg4EKMHV8AqtDxYFsb0j5gUlP8Ol9g==
   dependencies:
-    "@sveltejs/adapter-cloudflare" "1.0.0-next.23"
-    "@sveltejs/adapter-netlify" "1.0.0-next.65"
+    "@sveltejs/adapter-cloudflare" "1.0.0-next.25"
+    "@sveltejs/adapter-netlify" "1.0.0-next.66"
     "@sveltejs/adapter-vercel" "1.0.0-next.59"
 
-"@sveltejs/adapter-cloudflare@1.0.0-next.23":
-  version "1.0.0-next.23"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-cloudflare/-/adapter-cloudflare-1.0.0-next.23.tgz#eb65b64199c7451b3e8dcab9abbfb6382b56d361"
-  integrity sha512-WaDE25Ib3Q9kM1BBxvGxr57vfExg0Q1Wu2H3dSFV4Apw18UHKS89P/U6wd4u4zAzAw+Mcm8gduX/rRs5z0YMwA==
+"@sveltejs/adapter-cloudflare@1.0.0-next.25":
+  version "1.0.0-next.25"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-cloudflare/-/adapter-cloudflare-1.0.0-next.25.tgz#088291bc355f0a5b8114d6e5cbfa75dd3fc714ed"
+  integrity sha512-fhjH4LInepYxJ6ubuNO38sJeor04cUBKMPF5hpwrXLhKHrYTVwq1Oi7xNVbnrrIQzGRyiHOCvMy8E/MNnO3xLw==
   dependencies:
     esbuild "^0.14.42"
     worktop "0.8.0-next.14"
 
-"@sveltejs/adapter-netlify@1.0.0-next.65":
-  version "1.0.0-next.65"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-netlify/-/adapter-netlify-1.0.0-next.65.tgz#627a0201ffc99d226f3dced2f2087cca3d5612aa"
-  integrity sha512-81LYVqT0Fez7xqvOdE9ITD7b5kxdzzXjXwJ0ISBfJYt6wqg0fmABm3mcDy3opXau7DoQkhkhnlqkharTHfhJQg==
+"@sveltejs/adapter-netlify@1.0.0-next.66":
+  version "1.0.0-next.66"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-netlify/-/adapter-netlify-1.0.0-next.66.tgz#55c1bf03af3a8d38afaacaeacec766043d81fb5f"
+  integrity sha512-UypTRnTd+R1O6SaDdc8l3A3c9/mQF8xLNoVb3Ay5ipb7uPU5WmjVYjfLVGyeVy67gztFfeFC/9Esu4OI2Ayx1A==
   dependencies:
     "@iarna/toml" "^2.2.5"
     esbuild "^0.14.42"
