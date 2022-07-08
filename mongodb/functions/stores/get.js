@@ -33,7 +33,7 @@ const storesGet = async (arg) => {
         },
       },
 
-      // join with reviews collection
+      // join with store reviews collection
       {
         $lookup: {
           from: "reviews",
@@ -43,52 +43,56 @@ const storesGet = async (arg) => {
         },
       },
 
-      // join with review menus collection
+      // join with menus reviews collection
       {
         $unwind: {
-          path: "$reviews",
+          path: "$menus",
           preserveNullAndEmptyArrays: true,
         },
       },
       {
         $lookup: {
-          from: "menus",
-          localField: "reviews.menu_ids",
+          from: "reviews",
+          localField: "menus.review_ids",
           foreignField: "_id",
-          as: "reviews.menus",
+          as: "menus.reviews",
         },
       },
+
+      // add menu rating from all menu reviews
+      {
+        $addFields: {
+          menuRating: {
+            $avg: "$menus.reviews.rating",
+          },
+        },
+      },
+
       {
         $group: {
           _id: "$_id",
           name: { $first: "$name" },
           apps: { $first: "$apps" },
-          menus: { $first: "$menus" },
-          reviews: {
+          menus: {
             $push: {
-              id: "$reviews._id",
-              name: "$reviews.name",
-              rating: "$reviews.rating",
-              title: "$reviews.title",
-              comment: "$reviews.comment",
-              menus: "$reviews.menus",
-              create_at: "$reviews.create_at",
+              _id: "$menus._id",
+              name: "$menus.name",
+              price: "$menus.price",
+              reviews: "$menus.reviews",
+              create_at: "$menus.create_at",
             },
           },
+          reviews: { $first: "$reviews" },
           create_at: { $first: "$create_at" },
+          menuRating: { $avg: "$menuRating" },
         },
       },
 
-      // add store rating from all reviews
+      // add store rating from all store reviews
       {
         $addFields: {
-          rating: {
-            $avg: {
-              $map: {
-                input: "$reviews",
-                in: "$$this.rating",
-              },
-            },
+          storeRating: {
+            $avg: "$reviews.rating",
           },
         },
       },

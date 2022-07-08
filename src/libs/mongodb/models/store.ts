@@ -1,6 +1,6 @@
 import type { App } from "./app";
-import type { ReviewGet } from "./review";
-import type { Menu } from "./menu";
+import type { Review } from "./review";
+import type { MenuGet } from "./menu";
 
 export interface Store {
   _id: string;
@@ -14,7 +14,7 @@ export interface Store {
 export interface StoreList {
   _id: string;
   name: string;
-  rating: number;
+  rating: number | null;
   apps: App[];
   create_at: string;
 }
@@ -22,9 +22,10 @@ export interface StoreList {
 export interface StoreGet {
   _id: string;
   name: string;
-  rating: number;
+  storeRating: number | null;
+  menuRating: number | null;
   apps: App[];
-  menus: Menu[];
-  reviews: ReviewGet[];
+  menus: MenuGet[];
+  reviews: Review[];
   create_at: string;
 }

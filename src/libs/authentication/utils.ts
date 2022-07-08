@@ -11,7 +11,9 @@ export const signin = async (email: string, password: string) => {
     const account = await app.logIn(credential);
     user.set(account);
   } catch (error: any) {
-    throw new Error(`${error.error} (${error.errorCode})`);
+    throw new Error(`${error.error} (${error.errorCode})`, {
+      cause: error,
+    });
   }
 };
 

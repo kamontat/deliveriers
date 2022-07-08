@@ -10,6 +10,7 @@
   let loading: boolean = false;
 
   const _signin = async () => {
+    errorMessage = "";
     loading = true;
 
     try {

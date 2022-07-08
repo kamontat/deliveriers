@@ -5,12 +5,14 @@
   import { goto } from "$app/navigation";
 
   import DashboardContainer from "$components/dashboard/container.svelte";
+  import DashboardCards from "$components/dashboard/cards.svelte";
   import DashboardCard from "$components/dashboard/card.svelte";
   import Loading from "$components/loading.svelte";
 
   import { user } from "$lib/authentication";
   import { refreshCache, request } from "$mongodb/client";
   import { FNAME_APPS_LIST, FNAME_STORES_LIST } from "$mongodb/constants";
+  import { silentUpdateQuery } from "$lib/utils/url";
 
   const name: string = "Stores";
   const ratings = [
@@ -25,6 +27,9 @@
     { name: "By name", value: "name" },
     { name: "By rating", value: "rating" },
   ];
+
+  // TODO: merge alls filters to object instead
+  // TODO: add hot-reload if data is already on cache
 
   const parameters = $page.url.searchParams;
   let storeNameFilter: string | undefined = parameters.get("qName") ?? undefined;
@@ -56,16 +61,13 @@
       ascending: ascendingFilter,
     });
 
-    if (history.pushState) {
-      const parameters = new URLSearchParams();
-      if (storeNameFilter) parameters.set("qName", storeNameFilter);
-      if (appIdsFilter.length > 0) appIdsFilter.forEach((id) => parameters.append("qAppIds", id));
-      if (ratingsFilter.length > 0) ratingsFilter.forEach((id) => parameters.append("qRatings", `${id}`));
-      if (sortingFilter) parameters.set("qSortName", sortingFilter);
-      if (ascendingFilter) parameters.set("qAscending", `${ascendingFilter}`);
-
-      history.pushState({}, "", "?" + parameters.toString());
-    }
+    silentUpdateQuery({
+      qName: storeNameFilter,
+      qAppIds: appIdsFilter,
+      qRatings: ratingsFilter,
+      qSortName: sortingFilter,
+      qAscending: ascendingFilter,
+    });
   };
 
   const refreshing = () => {
@@ -174,16 +176,19 @@
       {#await stores}
         <Loading />
       {:then stores}
-        {#each stores.rows as row}
-          <DashboardCard
-            id={row._id}
-            name={row.name}
-            tags={row.apps.map((a) => a.name)}
-            extra={`R=${row.rating}`}
-            {onView}
-            {onReview}
-          />
-        {/each}
+        <DashboardCards>
+          {#each stores.rows as row}
+            <DashboardCard
+              id={row._id}
+              title={row.name}
+              rating={row.rating}
+              tags={row.apps.map((a) => a.name)}
+              createAt={new Date(row.create_at)}
+              {onView}
+              {onReview}
+            />
+          {/each}
+        </DashboardCards>
       {/await}
     {/if}
   </DashboardContainer>

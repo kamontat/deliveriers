@@ -47,8 +47,8 @@ const storesList = async (arg) => {
     {
       $lookup: {
         from: "reviews",
-        localField: "review_ids",
-        foreignField: "_id",
+        localField: "_id",
+        foreignField: "store_id",
         as: "reviews",
       },
     },

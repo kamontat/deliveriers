@@ -1,13 +1,16 @@
 <script lang="ts">
+  export let prefix: string = "";
   export let progress: number;
   export let minimum: number;
   export let maximum: number;
 
   const radius = 21;
   const circumference = radius * 2 * Math.PI;
+
   let offset = 0;
+  let percent = 0;
   $: {
-    let percent = ((progress - minimum) * 100) / (maximum - minimum);
+    percent = ((progress - minimum) * 100) / (maximum - minimum);
     offset = circumference - (percent / 100) * circumference;
   }
 </script>
@@ -18,10 +21,13 @@
     style="r: {radius}px; stroke-dasharray: {circumference} {circumference}; stroke-dashoffset: {offset};"
   />
   <circle
-    class="stroke-black"
+    class:stroke-red-500={percent <= 40}
+    class:stroke-orange-400={percent > 40 && percent <= 60}
+    class:stroke-lime-500={percent > 60 && percent <= 80}
+    class:stroke-green-600={percent > 80}
     style="r: {radius}px; stroke-dasharray: {circumference} {circumference}; stroke-dashoffset: {offset};"
   />
-  <text class="circle-text stroke-2" x="50%" y="50%" dy=".3em">{progress.toFixed(2)}</text>
+  <text class="circle-text stroke-2 stacked-fractions" x="50%" y="50%" dy=".3em">{prefix}{percent.toFixed(0)}</text>
 </svg>
 
 <style>

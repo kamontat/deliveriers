@@ -1,28 +1,75 @@
 <script lang="ts">
-  export let id: string;
-  export let name: string;
-  export let tags: string[];
-  export let extra: string;
+  import { formatDate } from "$lib/utils/date";
 
-  export let onView: (id: string) => () => void;
-  export let onReview: (id: string) => () => void;
+  type Callback = (id: string) => () => void;
+
+  import Circlebar from "../circlebar.svelte";
+
+  export let id: string;
+  export let title: string;
+  export let rating: number | undefined | null = undefined;
+  export let tags: string[];
+  export let createAt: Date | undefined = undefined;
+
+  export let onView: Callback | undefined = undefined;
+  export let onReview: Callback | undefined = undefined;
 </script>
 
-<div class="flex flex-row justify-between py-3 px-3 border-b first:border-t" name={id}>
-  <div class="flex-1">
-    <div>
-      <span>{name}</span>
-      <span class="text-xs">({extra})</span>
+<div class="flex flex-col justify-between border rounded-md p-2">
+  <div class="flex">
+    <div class="flex flex-col min-w-0 flex-1 mb-2">
+      <span class="text-lg font-bold break-words">{title}</span>
+      {#if createAt}
+        <span class="text-xs italic">({formatDate(createAt, { format: "short" })})</span>
+      {/if}
     </div>
 
-    <div class="my-2">
+    {#if rating}
+      <div class="flex flex-none">
+        <Circlebar progress={rating} minimum={0} maximum={5} />
+      </div>
+    {/if}
+  </div>
+  <div class="mt-1 flex flex-wrap">
+    {#each tags as tag}
+      <span class="m-0.5 p-0.5 text-xs border rounded border-blue-400">{tag}</span>
+    {/each}
+  </div>
+  <div class="mt-4 flex justify-center">
+    {#if onView}
+      <button
+        class="w-20 border rounded-l-full border-l-sky-300 border-y-sky-300 text-center hover:shadow-lg"
+        on:click={onView(id)}>View</button
+      >
+    {/if}
+
+    {#if onReview}
+      <button
+        class="w-20 border-r border-y rounded-r-full border-y-pink-400 border-r-pink-400 text-center hover:shadow-lg"
+        on:click={onReview(id)}>Review</button
+      >
+    {/if}
+  </div>
+</div>
+
+<!-- <div class="flex flex-row justify-between p-3 border-b first:border-t hover:drop-shadow-md" name={id}>
+  <div on:click={onView ? onView(id) : undefined} class="flex-1">
+    <div>
+      <span class="underline">{title}</span>
+      {#if subtitle}
+        <span class="text-xs">({subtitle})</span>
+      {/if}
+    </div>
+
+    <div class="mt-1 flex flex-wrap">
       {#each tags as tag}
-        <span class="p-1 text-xs border rounded border-blue-400">{tag}</span>
+        <span class="m-0.5 p-0.5 text-xs border rounded border-blue-400">{tag}</span>
       {/each}
     </div>
   </div>
   <div class="flex-none flex flex-col justify-center">
-    <button on:click={onView(id)} class="mx-2 my-1">View</button>
-    <button on:click={onReview(id)} class="mx-2 my-1">Review</button>
+    {#if onReview}
+      <button on:click={onReview(id)} class="mx-2 my-1">Review</button>
+    {/if}
   </div>
-</div>
+</div> -->

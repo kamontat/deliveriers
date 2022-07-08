@@ -27,13 +27,13 @@
       >
     {:else}
       <input
-        class="mx-1 py-1 px-2 rounded-md text-gray-900 outline-none border border-gray-300 focus:border-red-600"
+        class="mx-1 py-1 px-2 rounded-md text-gray-900 outline-none border border-gray-300 focus:border-sky-600"
         type="text"
         placeholder="Enter your email"
         bind:value={email}
       />
       <input
-        class="mx-1 py-1 px-2 rounded-md text-gray-900 outline-none border-2 border-gray-300 focus:border-red-600"
+        class="mx-1 py-1 px-2 rounded-md text-gray-900 outline-none border-2 border-gray-300 focus:border-sky-600"
         type="password"
         placeholder="Enter your password"
         bind:value={password}

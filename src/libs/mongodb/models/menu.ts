@@ -4,9 +4,14 @@ export interface Menu {
   _id: string;
   name: string;
   price: number;
+  review_ids: string[];
   create_at: string;
 }
 
-export interface MenuWithReviews extends Menu {
+export interface MenuGet {
+  _id: string;
+  name: string;
+  price: number;
   reviews: Review[];
+  create_at: string;
 }
