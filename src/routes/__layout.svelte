@@ -3,8 +3,6 @@
   import Main from "$lib/layouts/main.svelte";
   import Footer from "$lib/layouts/footer.svelte";
 
-  import { user, isSignin } from "$lib/authentication";
-
   import "../app.css";
 </script>
 
@@ -16,7 +14,7 @@
 <div class="flex flex-col h-full">
   <Header />
 
-  <Main isSignin={$isSignin}>
+  <Main>
     <slot />
   </Main>
 

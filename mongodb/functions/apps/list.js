@@ -1,4 +1,6 @@
 // Function name: apps/list
+// Version 2.0.0 - Initiate apps/list for 2.0 data
+// Version 2.0.1 - Fix `total` should be total rows with current filtered
 
 const getArgs = (arg, key, defaultValue) => {
   if (arg && arg[key]) {
@@ -7,7 +9,7 @@ const getArgs = (arg, key, defaultValue) => {
   return defaultValue;
 };
 
-const listApps = async (arg) => {
+const appsList = async (arg) => {
   const limit = getArgs(arg, "limit", 20);
   const name = getArgs(arg, "name", undefined);
 
@@ -24,15 +26,7 @@ const listApps = async (arg) => {
   }
 
   pipeline.push(
-    // format response
-    {
-      $project: {
-        _id: 0,
-        id: "$_id",
-        name: "$name",
-      },
-    },
-    // sort by date
+    // sort by name
     {
       $sort: {
         name: 1,
@@ -43,13 +37,13 @@ const listApps = async (arg) => {
   const mongodb = context.services.get("mongodb-atlas");
   const _apps = await mongodb.db("default").collection("apps", { collation: { strength: 1 } });
 
-  const count = await _apps.count();
   const rows = await _apps.aggregate(pipeline).toArray();
+  const total = rows.length;
 
   return {
-    total: count,
-    rows,
+    total,
+    rows: rows.slice(0, limit),
   };
 };
 
-exports = listApps;
+exports = appsList;

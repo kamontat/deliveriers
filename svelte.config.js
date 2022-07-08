@@ -32,6 +32,11 @@ const config = {
         __LICENSE__: JSON.stringify(pjson.license),
       },
     },
+    alias: {
+      $components: "src/libs/components",
+      $layouts: "src/libs/layouts",
+      $mongodb: "src/libs/mongodb",
+    },
   },
 };
 

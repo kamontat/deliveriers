@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
   import type { Load } from "@sveltejs/kit";
-  import ErrorMessage from "$lib/components/error.svelte";
+  import ErrorMessage from "$components/error.svelte";
 
   export const load: Load = ({ error, status }) => {
     return {

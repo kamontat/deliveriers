@@ -1,13 +1,8 @@
 import type { RealmUser } from "./models";
 
 import { Credentials } from "realm-web";
-import { browser } from "$app/env";
-import { goto } from "$app/navigation";
-
-import { SIGNIN_PATH } from "$lib/authentication";
-
 import { app } from "./constants";
-import { user, isSignin } from "./stores";
+import { user } from "./stores";
 
 export const signin = async (email: string, password: string) => {
   const credential = Credentials.emailPassword(email, password);
@@ -23,10 +18,10 @@ export const signin = async (email: string, password: string) => {
 export const signout = async () => {
   if (app.currentUser) {
     await app.currentUser.logOut();
-    user.set(undefined);
+    user.set(null);
   }
 };
 
-export const getUsername = (user: RealmUser | undefined): string => {
+export const getUsername = (user: RealmUser | undefined | null): string => {
   return user?.profile.email?.split("@")[0] ?? "Anonymous";
 };

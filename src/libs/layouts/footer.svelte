@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Heart from "$lib/icons/heart.svelte";
+  import Heart from "$components/icons/heart.svelte";
 
   const repository = __REPOSITORY__;
   const version = __VERSION__ ?? "version";

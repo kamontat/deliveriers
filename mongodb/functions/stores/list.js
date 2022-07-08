@@ -1,4 +1,5 @@
 // Function name: stores/list
+// Version 2.0.0 - Initiate apps/list for 2.0 data
 
 const getArgs = (arg, key, defaultValue) => {
   if (arg && arg[key]) {
@@ -7,11 +8,17 @@ const getArgs = (arg, key, defaultValue) => {
   return defaultValue;
 };
 
-const listStores = async (arg) => {
+const storesList = async (arg) => {
   const limit = getArgs(arg, "limit", 20);
   const name = getArgs(arg, "name", undefined);
-  const appName = getArgs(arg, "appName", undefined);
+  const appIds = getArgs(arg, "appIds", []);
+  const ratings = getArgs(arg, "ratings", []); // [1, 2, 3, 4, 5]
+  const sortName = getArgs(arg, "sortName", "create_at"); // "create_at" OR "rating"
+  const isAscendingSort = getArgs(arg, "ascending", false);
 
+  const sorting = {
+    [sortName]: isAscendingSort ? 1 : -1,
+  };
   const pipeline = [];
 
   if (name) {
@@ -25,17 +32,53 @@ const listStores = async (arg) => {
     });
   }
 
-  if (appName) {
-    const apps = await context.functions.execute("apps/list", {
-      name: appName,
-    });
-    const appIds = apps.rows.map((app) => app.id);
-    // console.log(JSON.stringify(appsIds, undefined, "  "));
+  if (appIds.length > 0) {
     pipeline.push({
       $match: {
         app_ids: {
-          $in: appIds,
+          $in: appIds.map((id) => BSON.ObjectId(id)),
         },
+      },
+    });
+  }
+
+  pipeline.push(
+    // join with reviews collection
+    {
+      $lookup: {
+        from: "reviews",
+        localField: "review_ids",
+        foreignField: "_id",
+        as: "reviews",
+      },
+    },
+
+    // add store rating from all reviews
+    {
+      $addFields: {
+        rating: {
+          $avg: {
+            $map: {
+              input: "$reviews",
+              in: "$$this.rating",
+            },
+          },
+        },
+      },
+    }
+  );
+
+  if (ratings.length > 0) {
+    const or = ratings.map((rating) => ({
+      rating: {
+        $gte: rating,
+        $lt: rating + 1,
+      },
+    }));
+
+    pipeline.push({
+      $match: {
+        $or: or,
       },
     });
   }
@@ -51,63 +94,27 @@ const listStores = async (arg) => {
       },
     },
 
+    // remove app_ids from response collection
     {
-      $unwind: {
-        path: "$apps",
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-
-    {
-      $group: {
-        _id: "$name",
-        id: {
-          $first: "$_id",
-        },
-        createAt: {
-          $first: "$create_at",
-        },
-        apps: {
-          $push: {
-            id: "$apps._id",
-            name: "$apps.name",
-          },
-        },
-      },
-    },
-
-    {
-      $project: {
-        _id: 0,
-      },
+      $unset: ["app_ids", "review_ids", "menu_ids", "reviews"],
     },
 
     // sort by date
     {
-      $sort: {
-        create_at: -1,
-      },
-    },
-
-    // filter only limit number of reviews
-    { $limit: limit }
+      $sort: sorting,
+    }
   );
 
   const mongodb = context.services.get("mongodb-atlas");
   const _stores = await mongodb.db("default").collection("stores");
 
-  const count = await _stores.count();
   const rows = await _stores.aggregate(pipeline).toArray();
+  const total = rows.length;
 
   return {
-    total: count,
-    // Current query have problem when application doesn't contains any apps.
-    // It form apps array with empty object. `apps: [{}]`
-    rows: rows.map((row) => {
-      row.apps = row.apps.length === 1 && row.apps[0].id === undefined ? [] : row.apps;
-      return row;
-    }),
+    total,
+    rows: rows.slice(0, limit),
   };
 };
 
-exports = listStores;
+exports = storesList;
