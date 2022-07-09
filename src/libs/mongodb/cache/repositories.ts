@@ -35,9 +35,10 @@ export const setCache = async <A, T>(
       localStorage.setItem(_key, JSON.stringify(result));
     }
     return _response;
-  } catch (err: any) {
+  } catch (e: unknown) {
+    const error = e as Error;
     const result: RawCacheErrorModel = {
-      error: err.message,
+      error: error.message,
     };
 
     if (_expire > 0) {
@@ -47,7 +48,7 @@ export const setCache = async <A, T>(
       });
       localStorage.setItem(_key, JSON.stringify(result));
     }
-    throw err;
+    throw error;
   }
 };
 
@@ -79,7 +80,7 @@ export const getCache = async <A, T>(key: CacheKey<A>): Promise<CacheResponse<T>
   };
 };
 
-export const removeCache = <A, T>(key: CacheKey<A>): void => {
+export const removeCache = <A>(key: CacheKey<A>): void => {
   const _key = createKey(key);
   cache.update((c) => {
     if (c[_key]) {

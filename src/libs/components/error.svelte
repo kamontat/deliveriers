@@ -3,8 +3,8 @@
 
   import Stop from "$components/icons/stop.svelte";
 
-  export let code: string | undefined = undefined;
-  export let message: string = "something went wrong, please try again";
+  export let code = "";
+  export let message = "something went wrong, please try again";
   export let back: Callback | undefined = undefined;
 </script>
 

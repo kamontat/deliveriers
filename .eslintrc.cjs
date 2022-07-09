@@ -3,7 +3,7 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended", "prettier"],
   plugins: ["svelte3", "@typescript-eslint"],
-  ignorePatterns: ["*.cjs"],
+  ignorePatterns: ["*.cjs", "mongodb/*"],
   overrides: [{ files: ["*.svelte"], processor: "svelte3/svelte3" }],
   settings: {
     "svelte3/typescript": () => require("typescript"),
@@ -15,6 +15,13 @@ module.exports = {
   env: {
     browser: true,
     es2017: true,
+    es2021: true,
     node: true,
+  },
+  globals: {
+    svelte: true,
+  },
+  rules: {
+    "no-undef": "off",
   },
 };

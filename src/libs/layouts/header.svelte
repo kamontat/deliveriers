@@ -7,7 +7,7 @@
   let email: string;
   let password: string;
   let errorMessage: string;
-  let loading: boolean = false;
+  let loading = false;
 
   const _signin = async () => {
     errorMessage = "";

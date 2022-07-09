@@ -3,9 +3,9 @@
 
   export let onSignin: () => void;
   export let onSignout: () => void;
-  export let errorMessage: string = "";
-  export let email: string = "";
-  export let password: string = "";
+  export let email = "";
+  export let password = "";
+  export let errorMessage = "";
   export let loading: boolean;
 </script>
 

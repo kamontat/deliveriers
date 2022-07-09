@@ -14,7 +14,7 @@
   import { FNAME_APPS_LIST, FNAME_STORES_LIST } from "$mongodb/constants";
   import { silentUpdateQuery } from "$lib/utils/url";
 
-  const name: string = "Stores";
+  const name = "Stores";
   const ratings = [
     { name: "Very good", value: 5 },
     { name: "Good", value: 4 },
@@ -32,16 +32,16 @@
   // TODO: add hot-reload if data is already on cache
 
   const parameters = $page.url.searchParams;
-  let storeNameFilter: string | undefined = parameters.get("qName") ?? undefined;
-  let appIdsFilter: string[] = parameters.getAll("qAppIds");
-  let ratingsFilter: number[] = parameters
+  let storeNameFilter = parameters.get("qName") ?? undefined;
+  let appIdsFilter = parameters.getAll("qAppIds");
+  let ratingsFilter = parameters
     .getAll("qRatings")
     .map((v) => parseInt(v))
     .filter(isFinite);
-  let sortingFilter: StoreListSorting | undefined = (parameters.get("qSortName") as StoreListSorting) ?? "create_at";
-  let ascendingFilter: boolean | undefined = parameters.get("qAscending") === "true";
+  let sortingFilter = (parameters.get("qSortName") as StoreListSorting) ?? "create_at";
+  let ascendingFilter = parameters.get("qAscending") === "true";
 
-  let advanceMode: boolean = false;
+  let advanceMode = false;
 
   let apps = request($user, FNAME_APPS_LIST);
   let stores = request($user, FNAME_STORES_LIST, {

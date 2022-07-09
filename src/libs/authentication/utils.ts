@@ -1,6 +1,6 @@
 import type { RealmUser } from "./models";
 
-import { Credentials } from "realm-web";
+import { Credentials, type MongoDBRealmError } from "realm-web";
 import { app } from "./constants";
 import { user } from "./stores";
 
@@ -10,7 +10,8 @@ export const signin = async (email: string, password: string) => {
   try {
     const account = await app.logIn(credential);
     user.set(account);
-  } catch (error: any) {
+  } catch (e) {
+    const error = e as MongoDBRealmError;
     throw new Error(`${error.error} (${error.errorCode})`, {
       cause: error,
     });

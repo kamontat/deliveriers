@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let prefix: string = "";
+  export let prefix = "";
   export let progress: number;
   export let minimum: number;
   export let maximum: number;

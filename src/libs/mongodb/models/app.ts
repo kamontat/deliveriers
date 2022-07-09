@@ -1,4 +1,4 @@
 export interface App {
-  _id: String;
+  _id: string;
   name: string;
 }
