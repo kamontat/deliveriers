@@ -22,6 +22,7 @@ module.exports = {
     svelte: true,
   },
   rules: {
+    // I disabled this rule because typescript already handles it
     "no-undef": "off",
   },
 };
