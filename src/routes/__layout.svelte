@@ -8,7 +8,7 @@
 
 <svelte:head>
   <title>Deliveriers</title>
-  <meta name="description" content="hello" />
+  <meta name="description" content="deliveries reviews platform" />
 </svelte:head>
 
 <div class="flex flex-col h-full">

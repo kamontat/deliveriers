@@ -14,7 +14,6 @@
   import { FNAME_APPS_LIST, FNAME_STORES_LIST } from "$mongodb/constants";
   import { silentUpdateQuery } from "$lib/utils/url";
 
-  const name = "Stores";
   const ratings = [
     { name: "Very good", value: 5 },
     { name: "Good", value: 4 },
@@ -89,10 +88,6 @@
     return () => goto(`/review?storeId=${id}`);
   };
 </script>
-
-<svelte:head>
-  <title>{name}</title>
-</svelte:head>
 
 <div class="flex flex-col h-full">
   <div class="flex flex-col my-2">
