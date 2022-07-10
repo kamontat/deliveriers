@@ -8,6 +8,7 @@
     "url": "https://github.com/kamontat/deliveriers"
   },
   "scripts": {
+    "postinstall": "playwright install",
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
     "package": "svelte-kit package",
