@@ -8,7 +8,7 @@
   export let id: string;
   export let title: string;
   export let rating: number | undefined | null = undefined;
-  export let tags: string[];
+  export let tags: string[] = [];
   export let createAt: Date | undefined = undefined;
 
   export let onView: Callback | undefined = undefined;
@@ -26,7 +26,7 @@
 
     {#if rating}
       <div class="flex flex-none">
-        <Circlebar progress={rating} minimum={0} maximum={5} />
+        <Circlebar progress={rating} minimum={0} maximum={5} mode="number" decimal={2} />
       </div>
     {/if}
   </div>
@@ -51,25 +51,3 @@
     {/if}
   </div>
 </div>
-
-<!-- <div class="flex flex-row justify-between p-3 border-b first:border-t hover:drop-shadow-md" name={id}>
-  <div on:click={onView ? onView(id) : undefined} class="flex-1">
-    <div>
-      <span class="underline">{title}</span>
-      {#if subtitle}
-        <span class="text-xs">({subtitle})</span>
-      {/if}
-    </div>
-
-    <div class="mt-1 flex flex-wrap">
-      {#each tags as tag}
-        <span class="m-0.5 p-0.5 text-xs border rounded border-blue-400">{tag}</span>
-      {/each}
-    </div>
-  </div>
-  <div class="flex-none flex flex-col justify-center">
-    {#if onReview}
-      <button on:click={onReview(id)} class="mx-2 my-1">Review</button>
-    {/if}
-  </div>
-</div> -->

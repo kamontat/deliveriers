@@ -1,5 +1,6 @@
 // Function name: stores/get
 // Version 2.0.0 - Initiate apps/list for 2.0 data
+// Version 2.0.1 - Fix menus has only reviews fields if menus is empty
 
 const storesGet = async (arg) => {
   try {
@@ -75,11 +76,17 @@ const storesGet = async (arg) => {
           apps: { $first: "$apps" },
           menus: {
             $push: {
-              _id: "$menus._id",
-              name: "$menus.name",
-              price: "$menus.price",
-              reviews: "$menus.reviews",
-              create_at: "$menus.create_at",
+              $cond: [
+                { $ne: [{ $ifNull: ["$menus._id", ""] }, ""] },
+                {
+                  _id: "$menus._id",
+                  name: "$menus.name",
+                  price: "$menus.price",
+                  reviews: "$menus.reviews",
+                  create_at: "$menus.create_at",
+                },
+                "$$REMOVE",
+              ],
             },
           },
           reviews: { $first: "$reviews" },

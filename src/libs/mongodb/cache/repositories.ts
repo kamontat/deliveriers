@@ -52,7 +52,7 @@ export const setCache = async <A, T>(
   }
 };
 
-export const getCache = async <A, T>(key: CacheKey<A>): Promise<CacheResponse<T>> => {
+export const getCache = <A, T>(key: CacheKey<A>): CacheResponse<T> => {
   const _key = createKey(key);
   const storage = localStorage.getItem(_key);
   if (!storage)

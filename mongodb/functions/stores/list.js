@@ -24,7 +24,8 @@ const storesList = async (arg) => {
   if (name) {
     pipeline.push({
       $search: {
-        autocomplete: {
+        // autocomplete doesn't work property on Thai language
+        text: {
           path: "name",
           query: name,
         },

@@ -1,8 +1,12 @@
 <script lang="ts">
   export let prefix = "";
+  export let suffix = "";
   export let progress: number;
   export let minimum: number;
   export let maximum: number;
+
+  export let mode: "percent" | "number" = "percent";
+  export let decimal = 0;
 
   const radius = 21;
   const circumference = radius * 2 * Math.PI;
@@ -27,7 +31,9 @@
     class:stroke-green-600={percent > 80}
     style="r: {radius}px; stroke-dasharray: {circumference} {circumference}; stroke-dashoffset: {offset};"
   />
-  <text class="circle-text stroke-2 stacked-fractions" x="50%" y="50%" dy=".3em">{prefix}{percent.toFixed(0)}</text>
+  <text class="circle-text stroke-2 text-sm" x="50%" y="50%" dy=".3em">
+    {prefix}{(mode === "percent" ? percent : progress).toFixed(decimal)}{suffix}
+  </text>
 </svg>
 
 <style>

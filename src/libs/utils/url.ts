@@ -7,7 +7,7 @@ export const silentUpdateQuery = (queries: Record<string, unknown>) => {
     else if (typeof value === "boolean") parameters.set(key, value ? "true" : "false");
     else if (typeof value === "number") parameters.set(key, value.toString());
     else if (Array.isArray(value) && value.length > 0) value.forEach((id) => parameters.append(key, `${id}`));
-    else console.error("silentUpdateQuery: unknown value type", value);
+    else console.warn("silentUpdateQuery: unknown value type", value);
   });
 
   history.pushState({}, "", "?" + parameters.toString());

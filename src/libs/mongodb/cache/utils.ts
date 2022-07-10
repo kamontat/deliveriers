@@ -22,6 +22,21 @@ export const parseKey = <T>(key: string): CacheKey<T> => {
   };
 };
 
+export const get = <A, T>(key: CacheKey<A>) => {
+  const cache = getCache(key);
+  if (cache.status === "success") {
+    console.log("Cache hit (expire", cache.expireIn, "ms)");
+    return cache.response as T;
+  }
+
+  return undefined;
+};
+
+export const set = <A, T>(key: CacheKey<A>, expireIn: number, callback: (key: CacheKey<A>) => Promise<T>) => {
+  console.log("Cache missed!", key);
+  return setCache(key, expireIn, callback);
+};
+
 export const getOrUpdate = async <A, T>(
   key: CacheKey<A>,
   callback: (key: CacheKey<A>) => Promise<T>,
@@ -35,13 +50,9 @@ export const getOrUpdate = async <A, T>(
   const _expireIn = _options.cache ? _options.expireIn : 0;
 
   if (_options.cache) {
-    const cache = await getCache(key);
-    if (cache.status === "success") {
-      console.log("Cache hit (expire", cache.expireIn, "ms)");
-      return cache.response as T;
-    }
+    const cache = get<A, T>(key);
+    if (cache) return cache;
   }
 
-  console.log("Cache missed!", key);
-  return setCache(key, _expireIn, callback);
+  return set(key, _expireIn, callback);
 };

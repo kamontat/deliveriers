@@ -2,16 +2,17 @@
   import type { StoreListSorting } from "$mongodb/models/storeList";
 
   import { page } from "$app/stores";
-  import { goto } from "$app/navigation";
 
-  import DashboardContainer from "$components/dashboard/container.svelte";
-  import DashboardCards from "$components/dashboard/cards.svelte";
-  import DashboardCard from "$components/dashboard/card.svelte";
+  import StoreContainer from "$components/stores/container.svelte";
+  import StoreCards from "$components/stores/cards.svelte";
+  import StoreCard from "$components/stores/card.svelte";
   import Loading from "$components/loading.svelte";
 
-  import { user } from "$lib/authentication";
-  import { refreshCache, request } from "$mongodb/client";
+  import { refreshCache, request, requestCache } from "$mongodb/client";
   import { FNAME_APPS_LIST, FNAME_STORES_LIST } from "$mongodb/constants";
+
+  import { user } from "$lib/authentication";
+  import { gotoCreateStore, gotoReview, gotoStore } from "$lib/routes";
   import { silentUpdateQuery } from "$lib/utils/url";
 
   const ratings = [
@@ -27,65 +28,47 @@
     { name: "By rating", value: "rating" },
   ];
 
-  // TODO: merge alls filters to object instead
-  // TODO: add hot-reload if data is already on cache
-
   const parameters = $page.url.searchParams;
-  let storeNameFilter = parameters.get("qName") ?? undefined;
-  let appIdsFilter = parameters.getAll("qAppIds");
-  let ratingsFilter = parameters
-    .getAll("qRatings")
-    .map((v) => parseInt(v))
-    .filter(isFinite);
-  let sortingFilter = (parameters.get("qSortName") as StoreListSorting) ?? "create_at";
-  let ascendingFilter = parameters.get("qAscending") === "true";
 
   let advanceMode = false;
+  let filters = {
+    name: parameters.get("qName") ?? undefined,
+    appIds: parameters.getAll("qAppIds"),
+    ratings: parameters.getAll("qRatings").map(parseInt),
+    sortName: (parameters.get("qSortName") as StoreListSorting) ?? "create_at",
+    ascending: parameters.get("qAscending") === "true",
+  };
 
   let apps = request($user, FNAME_APPS_LIST);
-  let stores = request($user, FNAME_STORES_LIST, {
-    name: storeNameFilter,
-    appIds: appIdsFilter,
-    ratings: ratingsFilter,
-    sortName: sortingFilter,
-    ascending: ascendingFilter,
-  });
+  let stores = request($user, FNAME_STORES_LIST, filters);
+  $: {
+    const store = requestCache($user, FNAME_STORES_LIST, filters);
+    if (store) stores = new Promise((res) => res(store));
+  }
 
   const searchStore = () => {
-    stores = request($user, FNAME_STORES_LIST, {
-      name: storeNameFilter,
-      appIds: appIdsFilter,
-      ratings: ratingsFilter,
-      sortName: sortingFilter,
-      ascending: ascendingFilter,
-    });
+    stores = request($user, FNAME_STORES_LIST, filters);
 
     silentUpdateQuery({
-      qName: storeNameFilter,
-      qAppIds: appIdsFilter,
-      qRatings: ratingsFilter,
-      qSortName: sortingFilter,
-      qAscending: ascendingFilter,
+      qName: filters.name,
+      qAppIds: filters.appIds,
+      qRating: filters.ratings,
+      qSortName: filters.sortName,
+      qAscending: filters.ascending,
     });
   };
 
   const refreshing = () => {
     apps = refreshCache($user, FNAME_APPS_LIST);
-    stores = refreshCache($user, FNAME_STORES_LIST, {
-      name: storeNameFilter,
-      appIds: appIdsFilter,
-      ratings: ratingsFilter,
-      sortName: sortingFilter,
-      ascending: ascendingFilter,
-    });
+    stores = refreshCache($user, FNAME_STORES_LIST, filters);
   };
 
   const onView = (id: string) => {
-    return () => goto(`/store/${id}`);
+    return () => gotoStore(id);
   };
 
   const onReview = (id: string) => {
-    return () => goto(`/review?storeId=${id}`);
+    return () => gotoReview({ storeId: id });
   };
 </script>
 
@@ -101,14 +84,14 @@
         {/if}
       </div>
 
-      <button class="flex-none underline text-lg">Create</button>
+      <button class="flex-none underline text-lg" on:click={gotoCreateStore}>Create</button>
     </div>
 
     <div class="flex flex-col md:flex-row mt-4">
       <input
         class="flex-1 md:mr-5 mt-1 py-1 px-3 border border-gray-300 bg-white rounded-md shadow-sm"
         placeholder="store name"
-        bind:value={storeNameFilter}
+        bind:value={filters.name}
         on:keydown={(event) => event.key === "Enter" && searchStore()}
       />
 
@@ -130,7 +113,7 @@
             {:then apps}
               {#each apps.rows as row}
                 <label class="mx-1 my-1">
-                  <input type="checkbox" bind:group={appIdsFilter} value={row._id.toString()} />
+                  <input type="checkbox" bind:group={filters.appIds} value={row._id.toString()} />
                   {row.name}
                 </label>
               {/each}
@@ -143,7 +126,7 @@
         <div class="flex flex-wrap">
           {#each ratings as rating}
             <label class="mx-1 my-1">
-              <input type="checkbox" bind:group={ratingsFilter} value={rating.value} />
+              <input type="checkbox" bind:group={filters.ratings} value={rating.value} />
               {rating.name}
             </label>
           {/each}
@@ -153,27 +136,30 @@
       <div class="my-1">
         <h2>Sorting</h2>
         <div class="flex">
-          <select title="sorting" class="flex-1 w-full mx-1 my-1 py-1 border rounded" bind:value={sortingFilter}>
+          <select title="sorting" class="flex-1 w-full mx-1 my-1 py-1 border rounded" bind:value={filters.sortName}>
             {#each sortings as sorting}
               <option value={sorting.value}>{sorting.name}</option>
             {/each}
           </select>
-          <button class="flex-none underline" on:click={() => (ascendingFilter = !ascendingFilter)}
-            >{ascendingFilter ? "Ascending" : "Descending"}</button
+          <button
+            class="flex-none underline"
+            on:click={() => (filters = { ...filters, ascending: !filters.ascending })}
+          >
+            {filters.ascending ? "Ascending" : "Descending"}</button
           >
         </div>
       </div>
     </div>
   </div>
 
-  <DashboardContainer>
+  <StoreContainer>
     {#if stores}
       {#await stores}
         <Loading />
       {:then stores}
-        <DashboardCards>
+        <StoreCards>
           {#each stores.rows as row}
-            <DashboardCard
+            <StoreCard
               id={row._id}
               title={row.name}
               rating={row.rating}
@@ -183,31 +169,8 @@
               {onReview}
             />
           {/each}
-        </DashboardCards>
+        </StoreCards>
       {/await}
     {/if}
-  </DashboardContainer>
+  </StoreContainer>
 </div>
-
-<!-- 
-<h1>Recent stores</h1>
-
-{#if apps && stores}
-  {#await apps}
-    <p>loading...</p>
-  {:then apps}
-    {apps.total}
-    {#each apps.rows as row}
-      <p id={row.id}>{row.name}</p>
-    {/each}
-  {/await}
-
-  {#await stores}
-    <p>loading...</p>
-  {:then stores}
-    {stores.total}
-    {#each stores.rows as row}
-      <p id={row.id}>{row.name} - {row.apps.map((a) => a.name)}</p>
-    {/each}
-  {/await}
-{/if} -->

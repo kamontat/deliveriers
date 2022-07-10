@@ -15,6 +15,7 @@
   import { FNAME_STORES_GET } from "$mongodb/constants";
   import { formatDate } from "$lib/utils/date";
   import { silentUpdateQuery } from "$lib/utils/url";
+  import { gotoReview } from "$lib/routes";
 
   const options = {
     expire: 15 * 60 * 1000,
@@ -45,22 +46,31 @@
         <ErrorMessage code="400" message={store.response} back={() => goto("/")} />
       {:else}
         <div class="flex flex-row pb-2">
-          <div class="flex-1">
+          <div class="flex-1 flex flex-col items-start">
             <h1 class="text-lg font-bold leading-4">
               <button on:click={refreshing}>{store.response.name}</button>
             </h1>
             <span class="text-xs font-normal">
               {formatDate(new Date(store.response.create_at), { format: "long" })}
             </span>
+
+            <button
+              class="mt-3 px-2 py-0.5 text-sm border-2 border-violet-600 rounded-lg"
+              on:click={() => gotoReview({ storeId: store.response._id })}
+            >
+              Review
+            </button>
           </div>
-          <div class="flex-none mx-1">
+          <div class="flex-none flex flex-col justify-center mx-1">
             {#if store?.response?.storeRating}
-              <Circlebar progress={store.response.storeRating} minimum={0} maximum={5} />
+              <span class="text-center">Store</span>
+              <Circlebar progress={store.response.storeRating} minimum={0} maximum={5} suffix="%" />
             {/if}
           </div>
-          <div class="flex-none mx-1">
+          <div class="flex-none flex flex-col justify-center mx-1">
             {#if store?.response?.menuRating}
-              <Circlebar progress={store.response.menuRating} minimum={0} maximum={5} />
+              <span class="text-center">Menu</span>
+              <Circlebar progress={store.response.menuRating} minimum={0} maximum={5} suffix="%" />
             {/if}
           </div>
         </div>
