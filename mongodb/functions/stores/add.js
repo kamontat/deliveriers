@@ -8,12 +8,16 @@ const getArgs = (arg, key, defaultValue) => {
   return defaultValue;
 };
 
+const toObjectIds = (array) => {
+  return array.map((element) => BSON.ObjectId(element));
+};
+
 const storesAdd = async (arg) => {
   const store = {
     name: arg.name,
-    app_ids: getArgs(arg, "appIds", []),
-    menu_ids: getArgs(arg, "menuIds", []),
-    review_ids: getArgs(arg, "reviewIds", []),
+    app_ids: toObjectIds(getArgs(arg, "appIds", [])),
+    menu_ids: toObjectIds(getArgs(arg, "menuIds", [])),
+    review_ids: toObjectIds(getArgs(arg, "reviewIds", [])),
     create_at: getArgs(arg, "createAt", new Date()),
   };
 

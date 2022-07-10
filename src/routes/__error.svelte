@@ -15,6 +15,7 @@
 <script lang="ts">
   export let code: string;
   export let message: string;
+  export let error: string | undefined = undefined;
 </script>
 
-<ErrorMessage {code} {message} />
+<ErrorMessage {code} message={error ?? message} />

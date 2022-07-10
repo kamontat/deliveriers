@@ -1,27 +1,44 @@
 <script lang="ts">
+  import type { MongoDBRealmError } from "realm-web";
+  type CustomError = {
+    code: string;
+    message: string;
+    link?: string;
+  };
+
   import { user } from "$lib/authentication";
+  import { request } from "$mongodb/client";
+  import { FNAME_APPS_LIST, FNAME_STORES_ADD } from "$mongodb/constants";
+  import { gotoStore } from "$lib/routes";
 
-  import { request } from "$lib/mongodb/client";
-  import { FNAME_APPS_LIST, FNAME_STORES_ADD } from "$lib/mongodb/constants";
-
+  let errors: CustomError | undefined = undefined;
   let name = "";
   let appIds: string[] = [];
 
   let apps = request($user, FNAME_APPS_LIST);
   const createStore = async () => {
-    const response = await request(
-      $user,
-      FNAME_STORES_ADD,
-      {
-        name,
-        appIds,
-      },
-      {
-        cache: false,
-      }
-    );
+    try {
+      const response = await request(
+        $user,
+        FNAME_STORES_ADD,
+        {
+          name,
+          appIds,
+        },
+        {
+          cache: false,
+        }
+      );
 
-    console.log(response);
+      if (response) gotoStore(response.id);
+    } catch (e) {
+      const error = e as MongoDBRealmError;
+      errors = {
+        code: error.errorCode ?? "Unknown",
+        message: error.error ?? "Something went wrong",
+        link: error.link,
+      };
+    }
   };
 </script>
 
@@ -52,4 +69,12 @@
   {/if}
 
   <button class="mt-2 underline" type="submit" on:click={createStore}>Submit</button>
+  {#if errors}
+    <div class="flex justify-center items-center mt-4">
+      <span>
+        {errors.code}: {errors.message} ({#if errors.link}
+          <a class="underline" href={errors.link} target="_blank">logs</a>{/if})
+      </span>
+    </div>
+  {/if}
 </div>
