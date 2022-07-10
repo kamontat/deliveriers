@@ -8,12 +8,12 @@
     "url": "https://github.com/kamontat/deliveriers"
   },
   "scripts": {
-    "postinstall": "playwright install",
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
     "package": "svelte-kit package",
     "preview": "svelte-kit preview",
     "prepare": "svelte-kit sync",
+    "test:install": "playwright install",
     "test": "playwright test",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
