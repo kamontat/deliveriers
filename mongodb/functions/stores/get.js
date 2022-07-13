@@ -1,6 +1,7 @@
 // Function name: stores/get
-// Version 2.0.0 - Initiate apps/list for 2.0 data
+// Version 2.0.0 - Initiate stores/get for 2.0 data
 // Version 2.0.1 - Fix menus has only reviews fields if menus is empty
+// Version 2.1.0 - Change menu price to history of prices
 
 const storesGet = async (arg) => {
   try {
@@ -81,7 +82,7 @@ const storesGet = async (arg) => {
                 {
                   _id: "$menus._id",
                   name: "$menus.name",
-                  price: "$menus.price",
+                  prices: "$menus.prices",
                   reviews: "$menus.reviews",
                   create_at: "$menus.create_at",
                 },

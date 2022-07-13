@@ -5,7 +5,9 @@
 
   export let code = "";
   export let message = "something went wrong, please try again";
-  export let back: Callback | undefined = undefined;
+
+  export let actionName = "";
+  export let action: Callback | undefined = undefined;
 </script>
 
 <div class="flex flex-col justify-center items-center h-full">
@@ -17,7 +19,7 @@
       <span class="font-bold">({code})</span>
     {/if}
   </p>
-  {#if back}
-    <button class="underline" on:click={back}>Back</button>
+  {#if actionName && action}
+    <button class="underline" on:click={action}>{actionName}</button>
   {/if}
 </div>

@@ -44,7 +44,7 @@ export const getOrUpdate = async <A, T>(
 ) => {
   const _options: Required<CacheOption> = {
     cache: options?.cache ?? true,
-    expireIn: options?.expireIn ?? 5 * 60 * 1000, // default is 5 minutes
+    expireIn: options?.expireIn ?? 15 * 60 * 1000, // default is 15 minutes
   };
   // If cache is false, don't use cache. If cache is true, get expireIn value to fallback to default value
   const _expireIn = _options.cache ? _options.expireIn : 0;

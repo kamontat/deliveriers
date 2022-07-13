@@ -43,7 +43,7 @@
       <Loading />
     {:then store}
       {#if store.status === "ERROR"}
-        <ErrorMessage code="400" message={store.response} back={() => goto("/")} />
+        <ErrorMessage code="400" message={store.response} actionName="home" action={() => goto("/")} />
       {:else}
         <div class="flex flex-row pb-2">
           <div class="flex-1 flex flex-col items-start">

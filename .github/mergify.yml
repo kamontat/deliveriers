@@ -5,7 +5,8 @@ pull_request_rules:
       - base=main
       - -closed
       - -conflict
-      - check-success=Default
+      - check-success=Default flow / build (16.x)
+      - check-success=Default flow / build (18.x)
     actions:
       merge:
         method: merge
@@ -17,7 +18,8 @@ pull_request_rules:
       - -closed
       - label!=wip
       - -title~=^wip
-      - check-success=Default
+      - check-success=Default flow / build (16.x)
+      - check-success=Default flow / build (18.x)
     actions:
       merge:
         method: merge

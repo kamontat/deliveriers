@@ -1,5 +1,5 @@
 // Function name: stores/add
-// Version 2.0.0 - Initiate apps/list for 2.0 data
+// Version 2.0.0 - Initiate stores/add for 2.0 data
 
 const getArgs = (arg, key, defaultValue) => {
   if (arg && arg[key]) {

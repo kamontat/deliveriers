@@ -3,7 +3,7 @@ import type { Review } from "./review";
 export interface Menu {
   _id: string;
   name: string;
-  price: number;
+  prices: number[];
   review_ids: string[];
   create_at: string;
 }
@@ -11,7 +11,7 @@ export interface Menu {
 export interface MenuGet {
   _id: string;
   name: string;
-  price: number;
+  prices: number[];
   reviews: Review[];
   create_at: string;
 }
