@@ -12,7 +12,7 @@ const menusAdd = async (arg) => {
   const storeId = arg.storeId;
   const menu = {
     name: arg.name,
-    prices: getArgs(arg, "prices", []),
+    prices: getArgs(arg, "prices", []).map(parseFloat).filter(isFinite),
     review_ids: getArgs(arg, "reviewIds", []),
     create_at: getArgs(arg, "createAt", new Date()),
   };

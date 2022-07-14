@@ -14,13 +14,19 @@
   let create: Promise<unknown> = new Promise((res) => res(undefined));
   export let createCallback: (name: string, price: number) => Promise<unknown> | undefined;
 
+  export let reload: () => Promise<MenuGet[]> | undefined;
+
   let menuName: string;
   let menuPrice: number;
 
   const onCreate = () => {
     try {
       const result = createCallback(menuName, menuPrice);
-      if (result) create = result;
+      if (result)
+        create = result
+          .then(() => reload())
+          .then((m) => m && (menus = m))
+          .then(() => ((menuName = ""), (menuPrice = 0)));
     } catch (e: unknown) {
       const error = e as Error;
       return new Promise((_, rej) => rej(error));
@@ -35,7 +41,7 @@
   {#each menus as menu}
     <div class="flex justify-start mt-3">
       <input class="w-5 mr-3" type="checkbox" bind:checked={select[menu._id]} />
-      <input class="py-1 px-2 border-2 border-gray-300 rounded-md shadow-sm" value={menu.name} readonly />
+      <input class="flex-1 py-1 px-2 border-2 border-gray-300 rounded-md shadow-sm" value={menu.name} readonly />
       {#if menu.prices.length > 0}
         <input
           class="w-14 ml-3 py-1 px-2 border-2 border-gray-300 rounded-md shadow-sm"
@@ -47,11 +53,11 @@
   {/each}
 </div>
 
+<div class="border mt-5" />
 <div class="mt-3 flex flex-col w-full h-full">
   {#await create}
     <Loading />
-  {:then created}
-    {JSON.stringify(created)}
+  {:then _}
     <div class="flex justify-start">
       <input
         bind:value={menuName}
@@ -60,6 +66,7 @@
       />
       <input
         bind:value={menuPrice}
+        type="number"
         placeholder="Price"
         class="flex-none w-20 ml-2 py-1 px-2 border-2 border-gray-300 rounded-md shadow-sm"
       />
@@ -70,7 +77,6 @@
       </button>
     </div>
   {:catch error}
-    {JSON.stringify(error.error)}
     <ErrorMessage
       message={error.message}
       actionName="Try again"

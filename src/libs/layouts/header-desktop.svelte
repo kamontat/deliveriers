@@ -16,7 +16,7 @@
   <div class="px-5">
     <a href="/" class="m-auto">Deliveriers</a>
   </div>
-  <div class="flex items-center px-5">
+  <form class="flex items-center px-5">
     {#if $isSignin}
       <span class="m-auto">@{getUsername($user)}</span>
       <button
@@ -45,10 +45,10 @@
       />
       <button
         class="px-5 underline disabled:no-underline disabled:text-gray-400"
-        type="button"
-        on:click={onSignin}
+        type="submit"
+        on:click|preventDefault={onSignin}
         disabled={loading}>Signin</button
       >
     {/if}
-  </div>
+  </form>
 </header>

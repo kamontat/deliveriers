@@ -38,7 +38,7 @@
   {:else}
     <div class="flex flex-col mx-2 my-3">
       <a href="/" class="flex my-auto mb-3">Deliveriers</a>
-      <div class="flex flex-col">
+      <form class="flex flex-col">
         <input
           class="py-1 px-2 my-2 rounded-md text-gray-900 outline-none border border-gray-300 focus:border-sky-600"
           type="text"
@@ -58,13 +58,13 @@
         {/if}
         <div class="flex justify-end">
           <button
-            type="button"
+            type="submit"
             class="underline disabled:no-underline mt-2 disabled:text-gray-400"
-            on:click={onSignin}
+            on:click|preventDefault={onSignin}
             disabled={loading}>Signin</button
           >
         </div>
-      </div>
+      </form>
     </div>
   {/if}
 </header>

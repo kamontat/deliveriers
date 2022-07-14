@@ -47,7 +47,7 @@
       {:else}
         <div class="flex flex-row pb-2">
           <div class="flex-1 flex flex-col items-start">
-            <h1 class="text-lg font-bold leading-4">
+            <h1 class="text-xl font-bold leading-4">
               <button on:click={refreshing}>{store.response.name}</button>
             </h1>
             <span class="text-xs font-normal">
