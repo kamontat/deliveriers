@@ -90,13 +90,13 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@playwright/test@^1.23.2":
-  version "1.23.2"
-  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.23.2.tgz#6af9e77bafcfe6dd17c23a44b40f793db5245d74"
-  integrity sha512-umaEAIwQGfbezixg3raSOraqbQGSqZP988sOaMdpA2wj3Dr6ykOscrMukyK3U6edxhpS0N8kguAFZoHwCEfTig==
+"@playwright/test@^1.27.1":
+  version "1.27.1"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.27.1.tgz#9364d1e02021261211c8ff586d903faa79ce95c4"
+  integrity sha512-mrL2q0an/7tVqniQQF6RBL2saskjljXzqNcCOVMUjRIgE6Y38nCNaP+Dc2FBW06bcpD3tqIws/HT9qiMHbNU0A==
   dependencies:
     "@types/node" "*"
-    playwright-core "1.23.2"
+    playwright-core "1.27.1"
 
 "@realm.io/common@^0.1.4":
   version "0.1.4"
@@ -2171,10 +2171,10 @@ pify@^2.3.0:
   resolved "https://registry.yarnpkg.com/pify/-/pify-2.3.0.tgz#ed141a6ac043a849ea588498e7dca8b15330e90c"
   integrity sha512-udgsAY+fTnvv7kI7aaxbqwWNb0AHiB0qBO89PZKPkoTmGOgdbrHDKD+0B2X4uTfJ/FT1R09r9gTsjUjNJotuog==
 
-playwright-core@1.23.2:
-  version "1.23.2"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.23.2.tgz#ddc15b3251e42ee0eed82a96ece3f7b2641d75a4"
-  integrity sha512-UGbutIr0nBALDHWW/HcXfyK6ZdmefC99Moo4qyTr89VNIkYZuDrW8Sw554FyFUamcFSdKOgDPk6ECSkofGIZjQ==
+playwright-core@1.27.1:
+  version "1.27.1"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.27.1.tgz#840ef662e55a3ed759d8b5d3d00a5f885a7184f4"
+  integrity sha512-9EmeXDncC2Pmp/z+teoVYlvmPWUC6ejSSYZUln7YaP89Z6lpAaiaAnqroUt/BoLo8tn7WYShcfaCh+xofZa44Q==
 
 postcss-import@^14.1.0:
   version "14.1.0"
